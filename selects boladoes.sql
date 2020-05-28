@@ -294,6 +294,13 @@ WHERE id IN (
 --aniversário esse ano), dos funcionários
 SELECT  nome + ' ' + sobrenome as Nome_Completo,
         data_nasc AS Nacido_EM,
-        DATEDIFF(DAY, data_nasc, GETDATE()) / 365 as Idade
+        FLOOR (DATEDIFF(DAY, data_nasc, GETDATE()) / 365.25) as Idade
 FROM funcionario
 
+--Vi essa forma no StackOverflow e fiquei curioso se (aaaaMMddd_atual - aaaMMdd_Nasc)/10000 = idade
+SELECT  nome + ' ' + sobrenome as Nome_Completo,
+        data_nasc AS Nacido_EM,
+        (CONVERT
+            (int,CONVERT(char(8),GETDATE(),112))-CONVERT(char(8),data_nasc,112))/10000 
+        AS AgeIntYears
+FROM funcionario
